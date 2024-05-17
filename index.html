@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Kuis</title>
+    <style>
+        /* CSS untuk styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: slide-in 0.5s ease forwards;
+            opacity: 0;
+        }
+        @keyframes slide-in {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="loginContainer">
+        <h2>Login</h2>
+        <input type="text" id="code" name="code" placeholder="Masukkan Kode">
+        <br>
+        <input type="text" id="name" name="name" placeholder="Masukkan Nama">
+        <br>
+        <input type="text" id="danaNumber" name="danaNumber" placeholder="Masukkan Nomor Dana">
+        <br>
+        <button type="button" onclick="login()">Login</button>
+    </div>
+
+    <div class="container" id="quizContainer" style="display: none;">
+        <h2>Kuis</h2>
+        <p id="questionText"></p>
+        <input type="text" id="answerInput" placeholder="Masukkan Jawaban">
+        <br>
+        <button onclick="checkAnswer()">Jawab</button>
+        <br>
+        <p id="feedback"></p>
+    </div>
+
+    <div class="container" id="resultContainer" style="display: none;">
+        <h2>Hasil Permainan</h2>
+        <p id="userInfo"></p>
+        <p id="scoreInfo"></p>
+    </div>
+
+    <script>
+        // Array untuk menyimpan kode yang sudah digunakan
+        var usedCodes = [];
+
+        // Pertanyaan dan jawaban
+        var questions = [
+            { question: "Siapakah presiden pertama Indonesia?", answer: "Soekarno" },
+            { question: "Berapakah hasil dari 5 + 3?", answer: "8" },
+            { question: " Apa yang menjadi warna langit pada siang hari?", answer: " Biru" },
+            { question: "Apa yang menjadi warna langit pada siang hari?", answer: "Biru" },
+            { question: "Apa singkatan dari HTML?", answer: "HyperText Markup Language" },
+            { question: "Siapakah penemu lampu pijar?", answer: "Thomas Edison" },
+            { question: "Berapakah hasil dari 10 - 5?", answer: "5" },
+            { question: "Apa ibukota Jepang?", answer: "Tokyo" },
+            { question: "Apakah perbedaan antara HTML dan CSS?", answer: "HTML digunakan untuk struktur dokumen web, sedangkan CSS digunakan untuk desain dan tata letak" },
+            { question: "Apa yang dimaksud dengan tag <div> dalam HTML?", answer: "Tag <div> digunakan untuk menandai sebuah blok atau bagian besar dari dokumen HTML" },
+            // Tambahkan pertanyaan dan jawaban tambahan di sini
+        ];
+        var currentQuestionIndex = 0;
+
+        // Logika permainan Kuis
+        var correctAnswers = 0;
+
+        function startQuiz() {
+            document.getElementById('questionText').textContent = questions[currentQuestionIndex].question;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('loginContainer').style.display = 'none';
+        }
+
+        function checkAnswer() {
+            var answerInput = document.getElementById('answerInput');
+            var feedback = document.getElementById('feedback');
+            var answer = answerInput.value.trim();
+
+            if (answer.toLowerCase() === questions[currentQuestionIndex].answer.toLowerCase()) {
+                feedback.textContent = 'Bener!'; // Menampilkan pesan 'Bener!'
+                correctAnswers++; // Menambah jumlah jawaban yang benar
+            } else {
+                feedback.textContent = 'Salah. Coba lagi.';
+            }
+
+            // Pindah ke pertanyaan berikutnya atau menampilkan hasil jika sudah dijawab semua
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                document.getElementById('questionText').textContent = questions[currentQuestionIndex].question;
+                answerInput.value = ''; // Mengosongkan input jawaban
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            var name = document.getElementById("name").value;
+            var danaNumber = document.getElementById("danaNumber").value;
+            var code = document.getElementById("code").value;
+
+            document.getElementById('userInfo').textContent = `Nama: ${name}, Nomor Dana: ${danaNumber}, Kode: ${code}`;
+            document.getElementById('scoreInfo').textContent = `Jumlah Jawaban Benar: ${correctAnswers} dari ${questions.length}`;
+
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        // Logika login
+        function login() {
+            var code = document.getElementById("code").value;
+            var name = document.getElementById("name").value;
+            var danaNumber = document.getElementById("danaNumber").value;
+
+            // Ganti dengan logika autentikasi yang sesuai
+            var validCodes = ["KH573825", "SI397500", "KH67578", "SI99999", "KH56474654"]; // Contoh daftar kode yang valid
+
+            if (validCodes.includes(code) && !usedCodes.includes(code)) {
+                if (name !== "" && danaNumber !== "") {
+                    // Lakukan sesuatu setelah pengguna berhasil login
+                    startQuiz(); // Mulai kuis setelah login berhasil
+                    usedCodes.push(code); // Tambahkan kode ke dalam daftar kode yang sudah digunakan
+
+                    // Hapus kode dari daftar valid agar tidak bisa digunakan lagi
+                    var index = validCodes.indexOf(code);
+                    if (index !== -1) {
+                        validCodes.splice(index, 1);
+                    }
+                } else {
+                    alert("Nama dan Nomor Dana tidak boleh kosong.");
+                }
+            } else {
+                alert("Kode tidak valid atau sudah digunakan. Silakan coba lagi.");
+            }
+        }
+
+        // Fungsi untuk menghasilkan kode acak dengan awalan "KH" atau "SI" sekali pakai
+        function generateCode() {
+            var prefixes = ["KH", "SI"];
+            var randomPrefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            var randomNumbers = Math.floor(100000 + Math.random() * 900000); // Untuk menghasilkan angka 6 digit
+            var generatedCode = randomPrefix + randomNumbers;
+
+            // Mengecek apakah kode sudah digunakan sebelumnya
+            if (!localStorage.getItem(generatedCode)) {
+                // Jika belum digunakan, menampilkan kode dan menyimpan status penggunaan
+                document.getElementById('code').textContent = generatedCode;
+                localStorage.setItem(generatedCode, true);
+            } else {
+                // Jika sudah digunakan, menghasilkan kode baru
+                generateCode();
+            }
+        }
+
+        // Panggil fungsi generateCode() saat halaman dimuat untuk menghasilkan kode secara otomatis
+        window.onload = generateCode;
+    </script>
+</body>
+</html>
